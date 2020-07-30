@@ -363,6 +363,12 @@ const render = (conteiner, template, place) => {
   conteiner.insertAdjacentHTML(place, template);
 };
 
+var renderTasks = function (count) {
+  for (let i = 0; i < TASK_COUNT; i++) {
+    render(taskListElement, createTaskTemplate(), `beforeend`);
+  }
+};
+
 const siteMainElement = document.querySelector(`.main`);
 const siteHeaderElement = siteMainElement.querySelector(`.main__control`);
 
@@ -375,8 +381,6 @@ const taskListElement = boardElement.querySelector(`.board__tasks`);
 
 render(taskListElement, createTaskEditTemplate(), `beforeend`);
 
-for (let i = 0; i < TASK_COUNT; i++) {
-  render(taskListElement, createTaskTemplate(), `beforeend`);
-}
+renderTasks(3);
 
 render(boardElement, createLoadMoreButtonTemplate(), `beforeend`);
