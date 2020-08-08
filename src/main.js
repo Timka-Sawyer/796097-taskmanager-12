@@ -23,6 +23,19 @@ const renderTasks = function () {
   }
 };
 
+const getNextTasks = (evt, renderedTaskCount, loadMoreButton) => {
+  evt.preventDefault();
+  tasks.slice(renderedTaskCount, renderedTaskCount + TASK_COUNT_PER_STEP)
+    .forEach((task) => render(taskListElement, createTaskTemplate(task), `beforeend`));
+
+  renderedTaskCount += TASK_COUNT_PER_STEP;
+
+  if (renderedTaskCount >= tasks.length) {
+    loadMoreButton.remove();
+  }
+  return renderedTaskCount;
+};
+
 const siteMainElement = document.querySelector(`.main`);
 const siteHeaderElement = siteMainElement.querySelector(`.main__control`);
 
@@ -45,14 +58,6 @@ if (tasks.length > TASK_COUNT_PER_STEP) {
   const loadMoreButton = boardElement.querySelector(`.load-more`);
 
   loadMoreButton.addEventListener(`click`, (evt) => {
-    evt.preventDefault();
-    tasks.slice(renderedTaskCount, renderedTaskCount + TASK_COUNT_PER_STEP)
-    .forEach((task) => render(taskListElement, createTaskTemplate(task), `beforeend`));
-
-    renderedTaskCount += TASK_COUNT_PER_STEP;
-
-    if (renderedTaskCount >= tasks.length) {
-      loadMoreButton.remove();
-    }
+    renderedTaskCount = getNextTasks(evt, renderedTaskCount, loadMoreButton);
   });
 }
