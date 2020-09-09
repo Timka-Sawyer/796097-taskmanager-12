@@ -69,31 +69,31 @@ const renderBoard = (boardContainer, boardTasks) => {
   render(boardComponent.getElement(), new SortView().getElement(), RenderPosition.AFTERBEGIN);
 
   boardTasks
-    .slice(0, Math.min(tasks.length, TASK_COUNT_PER_STEP))
-    .forEach((boardTask) => renderTask(taskListComponent.getElement(), boardTask));
+  .slice(0, Math.min(tasks.length, TASK_COUNT_PER_STEP))
+  .forEach((boardTask) => renderTask(taskListComponent.getElement(), boardTask));
 
   if (boardTasks.length > TASK_COUNT_PER_STEP) {
-    let renderedTaskCount = TASK_COUNT_PER_STEP;
-
     const loadMoreButtonComponent = new LoadMoreButtonView();
-
-    render(boardComponent.getElement(), loadMoreButtonComponent.getElement(), RenderPosition.BEFOREEND);
-
-    loadMoreButtonComponent.getElement().addEventListener(`click`, (evt) => {
+    let renderedTaskCount = TASK_COUNT_PER_STEP;
+    const loadMore = (evt) => {
       evt.preventDefault();
       boardTasks
-        .slice(renderedTaskCount, renderedTaskCount + TASK_COUNT_PER_STEP)
-        .forEach((boardTask) => renderTask(taskListComponent.getElement(), boardTask));
+    .slice(renderedTaskCount, renderedTaskCount + TASK_COUNT_PER_STEP)
+    .forEach((boardTask) => renderTask(taskListComponent.getElement(), boardTask));
 
       renderedTaskCount += TASK_COUNT_PER_STEP;
-
       if (renderedTaskCount >= boardTasks.length) {
         loadMoreButtonComponent.getElement().remove();
         loadMoreButtonComponent.removeElement();
       }
-    });
+    };
+
+    render(boardComponent.getElement(), loadMoreButtonComponent.getElement(), RenderPosition.BEFOREEND);
+
+    loadMoreButtonComponent.getElement().addEventListener(`click`, loadMore);
   }
 };
+
 
 render(siteHeaderElement, new SiteMenuView().getElement(), RenderPosition.BEFOREEND);
 render(siteMainElement, new FilterView(filters).getElement(), RenderPosition.BEFOREEND);
